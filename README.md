@@ -1,170 +1,246 @@
-# Moove DAO
+# Moove DAO - smart contract con Solidity Advanced
 
-## Descrizione del progetto
+Smart contract DAO sviluppato in **Solidity** e **Hardhat** per simulare la governance decentralizzata di una piattaforma di micro-mobilità condivisa chiamata **Moove**.
 
-Moove è un’azienda ipotetica che opera nel settore della micro mobilità condivisa in diverse città europee.  
-L’obiettivo di questo progetto è sviluppare uno smart contract DAO che permetta ai membri di partecipare alle decisioni di governance utilizzando un token ERC-20 come metodo di pagamento per acquistare quote della DAO.
-
-La DAO supporta:
-
-- acquisto di quote tramite token ERC-20
-- registrazione automatica dei membri dopo il primo acquisto
-- creazione di proposte da parte dei membri
-- voto ponderato in base al numero di quote possedute
-- più strategie di governance
-- esecuzione delle proposte
-- registro delle proposte e dei voti
+Il progetto consente ai membri di acquistare quote tramite token ERC-20, proporre decisioni, votare con peso proporzionale alle quote possedute ed eseguire automaticamente le proposte approvate.
 
 ---
 
-## Strategie di governance implementate
+# Descrizione del progetto
 
-Il contratto supporta almeno due strategie di governance, come richiesto dal progetto:
+Moove è un’azienda ipotetica che opera nel settore della mobilità urbana condivisa in diverse città europee.
 
-### 1. Maggioranza
-Una proposta viene approvata se i voti **favorevoli** sono maggiori dei voti **contrari**.
+L’obiettivo del progetto è realizzare una DAO (Decentralized Autonomous Organization) che permetta ai membri della community di partecipare alle decisioni strategiche della piattaforma.
 
-### 2. Consenso
-Una proposta viene approvata solo se:
+Ogni utente può:
+
+- acquistare quote della DAO tramite token ERC-20
+- diventare membro automaticamente
+- creare proposte
+- votare le decisioni
+- partecipare alla governance
+- consultare lo storico delle decisioni approvate o rifiutate
+
+---
+
+# Funzionalità implementate
+
+## Gestione quote
+
+- acquisto quote tramite token ERC-20
+- prezzo quota fisso definito nel contratto
+- aggiornamento totale quote vendute
+- possibilità per l’owner di chiudere la vendita
+
+## Gestione membri
+
+- registrazione automatica dopo il primo acquisto
+- verifica stato membro
+
+## Governance DAO
+
+- creazione proposte da parte dei membri
+- supporto a due strategie di voto:
+  - Majority
+  - Consensus
+- voto ponderato in base al numero di quote possedute
+- tre possibili scelte di voto:
+  - favorevole
+  - contrario
+  - astenuto
+
+## Gestione proposte
+
+- esecuzione proposta dopo la votazione
+- salvataggio stato proposta:
+  - approvata
+  - rifiutata
+  - eseguita
+- storico completo delle proposte
+
+## Trasferimento token opzionale
+
+Una proposta può includere anche un trasferimento ERC-20 dalla tesoreria della DAO verso un indirizzo esterno.
+
+---
+
+# Strategie di governance implementate
+
+## 1. Majority
+
+La proposta viene approvata se i voti favorevoli superano i voti contrari.
+
+### Ideale per:
+
+- decisioni rapide
+- modifiche operative
+- proposte ordinarie
+
+---
+
+## 2. Consensus
+
+La proposta viene approvata solo se:
 
 - tutti i membri votano
 - nessun membro vota contro
 - nessun membro si astiene
 - esiste almeno un voto favorevole
 
-Inoltre il contratto supporta tre possibili scelte di voto:
+### Ideale per:
 
-- **Favorevole**
-- **Contrario**
-- **Astenuto**
-
----
-
-## Funzionalità principali
-
-### 1. Acquisto quote
-Le quote della DAO possono essere acquistate usando il token ERC-20 `PaymentToken`, a un prezzo fisso definito nel contratto.
-
-### 2. Registrazione automatica dei membri
-Quando un utente acquista quote per la prima volta, viene registrato automaticamente come membro della DAO.
-
-### 3. Chiusura della vendita
-L’owner del contratto può chiudere la fase di vendita delle quote, impedendo ulteriori acquisti.
-
-### 4. Creazione delle proposte
-Solo i membri della DAO possono creare nuove proposte.
-
-### 5. Voto ponderato
-Il potere di voto di ogni membro è proporzionale al numero di quote possedute.
-
-### 6. Registrazione dei voti
-Ogni voto viene salvato e associato all’indirizzo del votante.
-
-### 7. Esecuzione delle proposte
-Una proposta può essere eseguita dopo la fase di voto e viene registrata come approvata o rifiutata.
-
-### 8. Trasferimento opzionale di token
-Una proposta può includere, in modo opzionale, un trasferimento di token ERC-20 dalla tesoreria della DAO verso un indirizzo Ethereum esterno.
+- decisioni importanti
+- modifiche strategiche
+- utilizzo fondi della DAO
 
 ---
 
-## Smart contract
+# Smart Contracts
 
-### `PaymentToken.sol`
-Contratto ERC-20 utilizzato come token di pagamento per acquistare le quote della DAO.
+## PaymentToken.sol
 
-### `MooveDAO.sol`
-Contratto principale che gestisce:
+Token ERC-20 utilizzato per acquistare quote della DAO.
 
-- acquisto quote
-- registrazione membri
-- creazione proposte
-- voto
-- esecuzione proposte
-- registro storico delle decisioni
+### Funzioni principali:
+
+- mint token agli utenti
+- approve spesa token
+- transfer token
 
 ---
 
-## Tecnologie utilizzate
+## MooveDAO.sol
+
+Contratto principale della governance.
+
+### Gestisce:
+
+- vendita quote
+- membri DAO
+- proposte
+- votazioni
+- esecuzione decisioni
+- trasferimenti token opzionali
+
+---
+
+# Tecnologie utilizzate
 
 - Solidity `0.8.24`
 - Hardhat
 - OpenZeppelin Contracts
 - JavaScript per i test
-- TypeScript per la configurazione di Hardhat
+- TypeScript per configurazione Hardhat
+- Node.js
+- npm
 
 ---
 
-## Funzionalità implementate
+# Test eseguiti
 
-- acquisto quote tramite token ERC-20
-- creazione automatica dei membri dopo l’acquisto
-- prezzo quota fisso definito nel contratto
-- possibilità per l’owner di chiudere la vendita
-- creazione di proposte da parte dei membri
-- supporto a due strategie di governance:
-  - maggioranza
-  - consenso
-- voto ponderato in base al numero di quote
-- supporto ai voti:
-  - favorevole
-  - contrario
-  - astenuto
-- esecuzione delle proposte
-- salvataggio dello stato della proposta come eseguita o approvata
-- registro delle proposte
-- registro dei voti dei singoli utenti
-- trasferimento opzionale di token ERC-20 verso un indirizzo esterno
+Sono stati realizzati test automatici con Hardhat per verificare:
 
----
-
-## Test eseguiti
-
-Sono stati realizzati test Hardhat per verificare i seguenti casi:
+## Deployment
 
 - deploy corretto dei contratti
-- impostazione corretta di owner, token e prezzo quota
+- owner impostato correttamente
+- token corretto collegato
+- prezzo quota corretto
+
+## Acquisto quote
+
 - acquisto quote funzionante
-- creazione automatica di un nuovo membro dopo il primo acquisto
-- aggiornamento corretto del numero totale di quote vendute
-- rifiuto di acquisti con importi non multipli del prezzo quota
-- solo l’owner può chiudere la vendita
-- impossibilità di acquistare quote dopo la chiusura della vendita
-- un non membro non può creare proposte
-- un membro può creare proposte con modalità maggioranza
-- un membro può creare proposte con modalità consenso
-- una proposta può salvare correttamente i dati di un eventuale trasferimento token
-- un non membro non può votare
-- un utente non può votare due volte la stessa proposta
-- il voto ponderato funziona correttamente
-- il voto del singolo utente viene registrato correttamente
-- è supportato anche il voto di astensione
-- una proposta in modalità maggioranza viene approvata correttamente se i voti favorevoli superano i contrari
-- una proposta in modalità maggioranza viene rifiutata se i voti contrari superano i favorevoli
-- una proposta non può essere eseguita due volte
-- una proposta in modalità consenso viene approvata solo se tutti votano a favore
-- una proposta in modalità consenso viene rifiutata se anche un solo membro vota contro
-- una proposta in modalità consenso viene rifiutata se un membro si astiene
-- una proposta approvata può eseguire anche un trasferimento ERC-20 dalla DAO verso un indirizzo esterno
+- creazione automatica nuovo membro
+- aggiornamento quote vendute
+- rifiuto importi non validi
+- blocco acquisti dopo chiusura vendita
+
+## Proposte
+
+- solo i membri possono creare proposte
+- creazione proposta Majority
+- creazione proposta Consensus
+- salvataggio dati proposta
+- proposta con trasferimento token
+
+## Voting
+
+- solo membri possono votare
+- impossibile votare due volte
+- voto ponderato corretto
+- registrazione voto singolo utente
+- supporto voto astenuto
+
+## Execute Proposal - Majority
+
+- approvazione con voti favorevoli maggiori
+- rifiuto con voti contrari maggiori
+- impossibile eseguire due volte
+
+## Execute Proposal - Consensus
+
+- approvazione solo con unanimità
+- rifiuto se un membro vota contro
+- rifiuto se un membro si astiene
+
+## Token Transfer
+
+- trasferimento ERC-20 corretto verso wallet esterno dopo approvazione proposta
 
 ---
 
-## Deployment del contratto
+# Installazione locale
 
-Esempio di esecuzione in locale:
-
-```bash
 npm install
 npx hardhat compile
 npx hardhat test
+
 
 ## Repository GitHub
 
 link: https://github.com/rikygiordano-a11y/REAlMooveDAO
 
 
+
 Sepolia Testnet
-## Contract Address
+## Contract Addresses
 
 link PaymentToken: 0x77F6e90a9c3ef7945e625C45BC46d2053FB64028
 link MooveDAO: 0xF15Cbd165E61c8e0214a6407f7186Db318bc6CC6
+
+
+
+# Competenze dimostrate
+
+Questo progetto dimostra competenze pratiche su:
+
+- sviluppo smart contract in Solidity
+- progettazione di una DAO
+- utilizzo di token ERC-20
+- sistemi di governance decentralizzata
+- voting ponderato
+- gestione proposal on-chain
+- Hardhat per compile e testing
+- deploy su Ethereum Sepolia Testnet
+- organizzazione di un progetto Web3
+- debugging e validazione del codice
+
+---
+
+# Conclusione
+
+Moove DAO rappresenta una simulazione completa di una piattaforma decentralizzata applicata al settore della mobilità urbana condivisa.
+
+Il progetto integra:
+
+- acquisto quote tramite token ERC-20
+- registrazione automatica dei membri
+- creazione ed esecuzione delle proposte
+- strategie di governance Majority e Consensus
+- voto ponderato in base alle quote possedute
+- trasferimenti opzionali di token dalla tesoreria DAO
+- deploy reale su Sepolia Testnet
+- test automatici con Hardhat
+
+
+Riccardo Giordano
