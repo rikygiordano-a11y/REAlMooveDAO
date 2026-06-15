@@ -41,6 +41,8 @@ contract MooveDAO is Ownable {
         bool hasTokenTransfer;
         address transferRecipient;
         uint256 transferAmount;
+        uint256 membersAtCreation;
+        uint256 deadline;
     }
 
     mapping(address => uint256) public shares;
@@ -127,8 +129,10 @@ contract MooveDAO is Ownable {
         GovernanceMode _governanceMode,
         bool _hasTokenTransfer,
         address _transferRecipient,
-        uint256 _transferAmount
+        uint256 _transferAmount,
+        uint256 _duration
     ) external onlyMember {
+        require(_duration > 0, "Durata non valida");
         require(bytes(_title).length > 0, "Titolo obbligatorio");
 
         if (_hasTokenTransfer) {
@@ -151,6 +155,8 @@ contract MooveDAO is Ownable {
             approved: false,
             exists: true,
             votersCount: 0,
+            membersAtCreation: totalMembers,
+            deadline: block.timestamp + _duration,
             hasTokenTransfer: _hasTokenTransfer,
             transferRecipient: _transferRecipient,
             transferAmount: _transferAmount
@@ -195,6 +201,7 @@ contract MooveDAO is Ownable {
 
         require(proposal.exists, "Proposta inesistente");
         require(!proposal.executed, "Proposta gia eseguita");
+        require(block.timestamp <= proposal.deadline, "Proposta scaduta");
 
         bool result = false;
 
@@ -208,7 +215,7 @@ contract MooveDAO is Ownable {
             if (
                 proposal.againstVotes == 0 &&
                 proposal.abstainVotes == 0 &&
-                proposal.votersCount == totalMembers &&
+                proposal.votersCount == proposal.membersAtCreation &&
                 proposal.forVotes > 0
             ) {
                 result = true;
@@ -262,6 +269,8 @@ contract MooveDAO is Ownable {
             bool executed,
             bool approved,
             uint256 votersCount,
+            uint256 membersAtCreation,
+            uint256 deadline,
             bool hasTokenTransfer,
             address transferRecipient,
             uint256 transferAmount
@@ -282,6 +291,8 @@ contract MooveDAO is Ownable {
             proposal.executed,
             proposal.approved,
             proposal.votersCount,
+            proposal.membersAtCreation,
+            proposal.deadline,
             proposal.hasTokenTransfer,
             proposal.transferRecipient,
             proposal.transferAmount
